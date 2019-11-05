@@ -1,0 +1,24 @@
+#! /bin/sh
+
+if [ `whoami` == "root" ]; then
+    printf "Please don't run this script as root\n"
+    exit 1
+fi
+
+_PATH="$HOME/.assets/wallpapers"
+
+
+_HOUR=$(date +%H)
+
+case $_HOUR in
+    [012345])               _FILE="wallpaper_night.jpg" ;;
+    [89] | 1[0123456789])   _FILE="wallpaper_day.jpg" ;;
+    2[0123])                _FILE="wallpaper_night.jpg" ;;
+    *) exit 1 ;;
+esac
+
+swaymsg -s $SWAYSOCK output "*" bg $_PATH/$_FILE fill 2> /dev/null
+
+unset _PATH
+unset _FILE
+unset _HOUR

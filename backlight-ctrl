@@ -1,0 +1,43 @@
+#! /bin/sh
+
+if [ `whoami` != "root" ]; then
+    printf "Please run this script as root\n"
+    exit 1
+fi
+
+BL_PATH="/sys/class/backlight/intel_backlight"
+MIN_BRIGHT="242"
+MAX_BRIGHT="10242"
+INCREMENT="1000"
+
+CURRENT_BRIGHT=$(cat $BL_PATH/actual_brightness)
+
+if [ -z "$1" ] ; then
+    printf "Usage:  backlight-ctrl [up | down]\n"
+    printf "        up: raise backlight brightness towards maximum\n"
+    printf "        down: lower backlight brightness towards minimum\n"
+    exit 1
+fi
+
+case $1 in
+    [Uu][Pp])
+        NEW_BRIGHT=$(( $CURRENT_BRIGHT + $INCREMENT ))
+        if  [ $NEW_BRIGHT -gt $MAX_BRIGHT ] ; then
+            NEW_BRIGHT=$MAX_BRIGHT
+        fi
+        NEW_BRIGHT=$(echo $NEW_BRIGHT | tee -a "$BL_PATH/brightness")
+        ;;
+    [Dd][Oo][Ww][Nn])
+        NEW_BRIGHT=$(( $CURRENT_BRIGHT - $INCREMENT ))
+        if  [ $NEW_BRIGHT -lt $MIN_BRIGHT ] ; then
+            NEW_BRIGHT=$MIN_BRIGHT
+        fi
+        NEW_BRIGHT=$(echo $NEW_BRIGHT | tee -a "$BL_PATH/brightness")
+        ;;
+    *)
+        NEW_BRIGHT=$CURRENT_BRIGHT
+        ;;
+esac
+
+echo "Brightness set to $NEW_BRIGHT"
+
