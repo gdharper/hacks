@@ -1,0 +1,9 @@
+[Unit]
+Description=Set wallpaper based on if it is day or night
+
+[Service]
+ExecStart=%h/bin/set-wallpaper
+
+[Install]
+WantedBy=multi-user.target
+
