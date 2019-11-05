@@ -1,0 +1,14 @@
+[Unit]
+Description=Wallpaper change timer
+RefuseManualStart=no
+RefuseManualStop=no
+
+[Timer]
+Persistent=true
+OnCalendar=*-*-* 8:00:00
+OnCalendar=*-*-* 20:00:00
+Unit=set-wallpaper.service
+
+[Install]
+WantedBy=default.target
+
